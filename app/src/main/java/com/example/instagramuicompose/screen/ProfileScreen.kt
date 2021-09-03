@@ -5,20 +5,22 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Icon
 import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material.icons.filled.KeyboardArrowDown
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.painter.Painter
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.SpanStyle
-import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
@@ -50,9 +52,11 @@ fun ProfileScreen() {
                     "Modern Monk \uD83D\uDC7C\n" +
                     "Fitness Enthusiat \uD83D\uDCAA",
             url = "https://github.com/DHRUV-LIMBACHIYA",
-            followedBy = listOf("danbilzerian","katrinakaif") ,
+            followedBy = listOf("danbilzerian", "katrinakaif"),
             otherCount = 54
         )
+        Spacer(modifier = Modifier.height(20.dp))
+        ButtonSection(modifier = Modifier.fillMaxWidth())
     }
 }
 
@@ -184,7 +188,7 @@ fun ProfileStatistics(
             fontWeight = FontWeight.Bold,
             fontSize = 20.sp
         )
-        
+
         Spacer(modifier = Modifier.height(4.dp))
 
         Text(
@@ -234,7 +238,7 @@ fun ProfileDescription(
             lineHeight = lineHeight
         )
 
-        if(followedBy.isNotEmpty()){
+        if (followedBy.isNotEmpty()) {
             // Style for followed person name text and others text
             val boldStyle = SpanStyle(
                 color = Color.Black,
@@ -248,7 +252,7 @@ fun ProfileDescription(
                         append(name)
                         pop() // Pop the current bold style.
                         // Append "," after name if it is not the last element in the list.
-                        if(index < followedBy.size - 1) {
+                        if (index < followedBy.size - 1) {
                             append(", ")
                         }
                     }
@@ -256,6 +260,78 @@ fun ProfileDescription(
                     pushStyle(boldStyle) // Push the bold style again.
                     append("$otherCount others")
                 }
+            )
+        }
+    }
+}
+
+/**
+ * Composable for displaying all action buttons.
+ */
+@Composable
+fun ButtonSection(
+    modifier: Modifier = Modifier
+) {
+    val minWidth = 100.dp
+    val height = 35.dp
+    Row(
+        modifier = modifier,
+        horizontalArrangement = Arrangement.SpaceEvenly,
+    ) {
+        ActionButton(
+            buttonText = "Following",
+            icon = Icons.Default.KeyboardArrowDown,
+            modifier = Modifier
+                .defaultMinSize(minWidth = minWidth)
+                .height(height)
+        )
+        ActionButton(
+            buttonText = "Message", modifier = Modifier
+                .defaultMinSize(minWidth = minWidth)
+                .height(height)
+        )
+        ActionButton(
+            buttonText = "Email", modifier = Modifier
+                .defaultMinSize(minWidth = minWidth)
+                .height(height)
+        )
+        ActionButton(
+            icon = Icons.Default.KeyboardArrowDown, modifier = Modifier.height(height)
+        )
+    }
+}
+
+@Composable
+fun ActionButton(
+    modifier: Modifier = Modifier,
+    buttonText: String? = null,
+    icon: ImageVector? = null
+) {
+    Row(
+        modifier = modifier
+            .border(
+                width = 1.dp,
+                color = Color.LightGray,
+                shape = RoundedCornerShape(6.dp)
+            )
+            .padding(6.dp),
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.Center
+    ) {
+        buttonText?.let {
+            Text(
+                text = buttonText,
+                fontWeight = FontWeight.SemiBold,
+                overflow = TextOverflow.Ellipsis,
+            )
+        }
+
+        icon?.let {
+            Icon(
+                imageVector = icon,
+                contentDescription = null,
+                tint = Color.Black,
+                modifier = Modifier.size(24.dp)
             )
         }
     }
