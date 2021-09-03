@@ -272,10 +272,11 @@ fun ProfileDescription(
 fun ButtonSection(
     modifier: Modifier = Modifier
 ) {
-    val minWidth = 100.dp
+    val minWidth = 110.dp
     val height = 35.dp
     Row(
-        modifier = modifier,
+        modifier = modifier
+            .padding(horizontal = 10.dp),
         horizontalArrangement = Arrangement.SpaceEvenly,
     ) {
         ActionButton(
@@ -331,7 +332,6 @@ fun ActionButton(
                 imageVector = icon,
                 contentDescription = null,
                 tint = Color.Black,
-                modifier = Modifier.size(24.dp)
             )
         }
     }
