@@ -4,6 +4,7 @@ import androidx.annotation.DrawableRes
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Icon
@@ -15,6 +16,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.clipToBounds
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.graphics.vector.ImageVector
@@ -27,6 +29,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.instagramuicompose.R
+import com.example.instagramuicompose.data.StoryHighlight
 
 /**
  * Created by Dhruv Limbachiya on 03-09-2021.
@@ -57,6 +60,14 @@ fun ProfileScreen() {
         )
         Spacer(modifier = Modifier.height(20.dp))
         ButtonSection(modifier = Modifier.fillMaxWidth())
+        Spacer(modifier = Modifier.height(20.dp))
+        HighlightSection(highLights = listOf(
+            StoryHighlight(R.drawable.highlight_1,"Thoughts"),
+            StoryHighlight(R.drawable.highlight_2,"Favorite Shot"),
+            StoryHighlight(R.drawable.highlight_3,"Fitness"),
+            StoryHighlight(R.drawable.highlight_4,"Birthday"),
+            StoryHighlight(R.drawable.highlight_5,"Snapchat"),
+        ), modifier = Modifier.fillMaxWidth().padding(start = 16.dp))
     }
 }
 
@@ -302,6 +313,9 @@ fun ButtonSection(
     }
 }
 
+/**
+ * Composable for Action Button like Following,Message & Email.
+ */
 @Composable
 fun ActionButton(
     modifier: Modifier = Modifier,
@@ -334,5 +348,45 @@ fun ActionButton(
                 tint = Color.Black,
             )
         }
+    }
+}
+
+/**
+ * Composable for displaying list of story highlights.
+ */
+@Composable
+fun HighlightSection(
+    modifier: Modifier = Modifier,
+    highLights: List<StoryHighlight>
+) {
+    LazyRow(
+        modifier = modifier,
+    ) {
+        items(highLights.size) {
+            HighLightItem(highlight = highLights[it])
+        }
+    }
+}
+
+/**
+ * Composable for creating individual story highlight with image & text.
+ */
+@Composable
+fun HighLightItem(
+    modifier: Modifier = Modifier,
+    highlight: StoryHighlight
+) {
+    Column(
+        modifier = modifier
+            .padding(10.dp),
+        verticalArrangement = Arrangement.Center,
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        RoundImage(imageResourceId = highlight.imageRes , modifier = Modifier.size(80.dp))
+        Spacer(modifier = Modifier.height(4.dp))
+        Text(
+            text = highlight.highlightName,
+            fontSize = 14.sp,
+        )
     }
 }
