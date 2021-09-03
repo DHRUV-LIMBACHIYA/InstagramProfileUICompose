@@ -17,6 +17,9 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.SpanStyle
+import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
@@ -40,6 +43,16 @@ fun ProfileScreen() {
         )
         Spacer(modifier = Modifier.height(4.dp))
         ProfileSection()
+        ProfileDescription(
+            displayName = "Dhruv Limbachiya",
+            description = "Sagittarius \uD83D\uDC7B\n" +
+                    "Android App Developer \uD83D\uDC69\u200D\uD83D\uDCBB\n" +
+                    "Modern Monk \uD83D\uDC7C\n" +
+                    "Fitness Enthusiat \uD83D\uDCAA",
+            url = "https://github.com/DHRUV-LIMBACHIYA",
+            followedBy = listOf("danbilzerian","katrinakaif") ,
+            otherCount = 54
+        )
     }
 }
 
@@ -94,7 +107,7 @@ fun ProfileSection(
     Column(
         modifier = modifier
             .fillMaxWidth()
-            .padding(horizontal = 20.dp, vertical = 16.dp),
+            .padding(horizontal = 20.dp, vertical = 10.dp),
     ) {
         Row(
             modifier = modifier
@@ -142,9 +155,9 @@ fun StatisticsSection(
     modifier: Modifier = Modifier
 ) {
     Row(
-        modifier = modifier
-            .fillMaxWidth(),
-        horizontalArrangement = Arrangement.SpaceAround
+        modifier = modifier,
+        horizontalArrangement = Arrangement.SpaceAround,
+        verticalAlignment = Alignment.CenterVertically
     ) {
         ProfileStatistics(number = "162", textToDisplay = "Posts")
         ProfileStatistics(number = "459", textToDisplay = "Followers")
@@ -178,5 +191,72 @@ fun ProfileStatistics(
             text = textToDisplay,
             fontSize = 16.sp
         )
+    }
+}
+
+
+/**
+ * Composable for user bio.
+ */
+@Composable
+fun ProfileDescription(
+    displayName: String,
+    description: String,
+    url: String,
+    followedBy: List<String>,
+    otherCount: Int
+) {
+    Column(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(horizontal = 20.dp)
+    ) {
+        val letterSpacing = 0.5.sp  // The amount of space to add between each letter
+        val lineHeight = 20.sp // Line height for the Paragraph
+
+        Text(
+            text = displayName,
+            fontWeight = FontWeight.Bold,
+            fontSize = 16.sp,
+            letterSpacing = letterSpacing,
+            lineHeight = lineHeight
+        )
+
+        Text(
+            text = description,
+            lineHeight = lineHeight
+        )
+
+        Text(
+            text = url,
+            color = Color(0xFF3D3D91),
+            letterSpacing = letterSpacing,
+            lineHeight = lineHeight
+        )
+
+        if(followedBy.isNotEmpty()){
+            // Style for followed person name text and others text
+            val boldStyle = SpanStyle(
+                color = Color.Black,
+                fontWeight = FontWeight.Bold
+            )
+            Text(
+                text = buildAnnotatedString {
+                    append("Followed by ")
+                    followedBy.forEachIndexed { index, name ->
+                        pushStyle(boldStyle) // Push the bold style in the stack. Followed text will have this pushed style.
+                        append(name)
+                        pop() // Pop the current bold style.
+                        // Append "," after name if it is not the last element in the list.
+                        if(index < followedBy.size - 1) {
+                            append(", ")
+                        }
+                    }
+                    append(" and ")
+                    pushStyle(boldStyle) // Push the bold style again.
+                    append("$otherCount others")
+                }
+            )
+        }
     }
 }
